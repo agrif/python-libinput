@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 
 import os.path
-from imp import load_source
 from setuptools import setup
+
+
+try:
+	from imp import load_source
+except ModuleNotFoundError:
+	import importlib.util
+	def load_source(module_name, file_path):
+		spec = importlib.util.spec_from_file_location(module_name, file_path)
+		module = importlib.util.module_from_spec(spec)
+		spec.loader.exec_module(module)
+		return module
 
 
 version = load_source('version', os.path.abspath('libinput/version.py'))
